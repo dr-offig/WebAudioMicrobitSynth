@@ -11,6 +11,8 @@
     <script type="text/javascript" src="js/synth_keyboard.js"></script>
     <script type="text/javascript" src="js/synth_sequencer.js"></script>
     <script type="text/javascript" src="js/synth_midi.js"></script>
+    <script src="components/SerialComponent/SerialComponent.js"></script>
+    <script src="components/MIDIComponent/MIDIComponent.js"></script>
     <script>
         WebAudioControlsOptions={
           useMidi:1,
@@ -162,6 +164,8 @@
         </div>
         
     </div>
+    <custom-serial id="customSerial"></custom-serial>
+    <custom-midi id="customMidi"></custom-midi>
     <script type="text/javascript" src="index.js"></script>
 </body>
 </html>

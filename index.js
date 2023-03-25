@@ -63,3 +63,36 @@ const controlIds = [
 
 
 controlIds.forEach(id => { document.getElementById(id).addEventListener('change', guiChangeHandler); });
+
+
+// Use this section to bypass actual MIDI connections, and directly connect the microbit 'MIDI' messages to the synth
+// You might do this if, for example, you don't have a virtual MIDI connection on your computer
+/*
+const customSerial = document.getElementById('customSerial');
+if (customSerial) {
+  customSerial.handleMIDI = function(val) {
+    if (!synth) { return; }
+    const noteOnMatch = val.match(/NoteOn (\d+) (\d+) (\d+)/);
+    if (noteOnMatch && noteOnMatch.length == 4) {
+        ctrl.note_on(parseInt(noteOnMatch[1]));
+    }
+    const noteOffMatch = val.match(/NoteOff (\d+) (\d+) (\d+)/);
+    if (noteOffMatch && noteOffMatch.length == 4) {
+        ctrl.note_off(parseInt(noteOffMatch[1]));
+    }
+    const controlChangeMatch = val.match(/ControlChange (\d+) (\d+) (\d+)/);
+    if (controlChangeMatch && controlChangeMatch.length == 4) {
+      const controllerNumber = parseInt(controlChangeMatch[1]);
+			const controllerValue = parseInt(controlChangeMatch[2]);
+			// scale midi range of 0-127 to knob range of 0-100
+			var scaledValue = controllerValue / 1.27;			
+			
+			var controllerObj = ctrl.controls.find((x) => { return (x.controllerNumber == controllerNumber); });
+			if (controllerObj) {
+				ctrl.setDspParam(controllerObj.tag, scaledValue);
+				ctrl.setControllerValue(controllerObj.tag, scaledValue);
+			}			
+		}
+  }
+}
+*/
