@@ -24,8 +24,8 @@ WebAudioMidiSynth runs best in Chrome.
 
 ## CREDIT
 WebAudioMidiSynth is licensed under MIT License.  
-It borrows heavily from 
-WebAudioSynthV2 by aike https://github.com/aike/webaudiosynthv2
-webaudio-controls by g200k https://github.com/g200kg/webaudio-controls
+It borrows heavily from  
+WebAudioSynthV2 by aike https://github.com/aike/webaudiosynthv2  
+webaudio-controls by g200k https://github.com/g200kg/webaudio-controls  
 
 Programming and GUI Design: dr-offig
