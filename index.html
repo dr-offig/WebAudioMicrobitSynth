@@ -3,56 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <title>Web Audio Synth V2</title>
-
-    <meta property="og:title" content="Web Audio Synth V2"/>
-    <meta property="og:description" content="Synthesizer App using Web Audio API and Web GL"/>
-    <meta property="og:image" content="https://aikelab.net/websynthv2/images/thumb.jpg"/>
-    <meta property="og:url" content="https://aikelab.net/websynthv2/"/>
-    <meta property="og:type" content="product"/>
-    <meta property="og:site_name" content="aikelab"/>
-
     <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-    <script type="text/javascript" src="js/three.min.js"></script>
     <script type="text/javascript" src="js/Stats.js"></script>
-    <script type="text/javascript" src="js/ThreePiece.js"></script>
     <script type="text/javascript" src="js/synth_controller.js"></script>
     <script type="text/javascript" src="js/synth_dsp.js"></script>
-    <script type="text/javascript" src="js/synth_view.js"></script>
     <script type="text/javascript" src="js/synth_message.js"></script>
     <script type="text/javascript" src="js/synth_keyboard.js"></script>
     <script type="text/javascript" src="js/synth_sequencer.js"></script>
     <script type="text/javascript" src="js/synth_midi.js"></script>
+    <script>
+        WebAudioControlsOptions={
+          useMidi:1,
+          midilearn: 1,
+          knobDiameter:20,
+          switchWidth:40,
+          switchHeight:20,
+        };
+    </script><script src="js/webaudio-controls.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 </head>
-<body style="background-color:#000;">
-    <div id="draw" style="margin:0 auto;"></div>
+<body>
+    <div id="mainPanel">
+        <div id="controlPanel" class="general-panel horizontal-panel">
+            <div id="startPanel" class="general-panel vertical-panel">
+                <div class="panel-label">Power</div>
+                <webaudio-switch id="startSwitch" src="knobs/ONButtonBlueFlat.png" width="64" height="64"></webaudio-switch>
+            </div>
+            <div id="glidePanel" class="general-panel vertical-panel">
+                <div class="panel-label">Glide</div>
+                <webaudio-switch id="glideSwitch" data-tag="s_glide" src="knobs/ONButtonBlueFlat.png" width="64" height="64"></webaudio-switch>
+                <webaudio-knob id="glideKnob" data-tag="k_glide" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+            </div>
+            <div id="oscillatorPanel" class="general-panel vertical-panel">
+                <div class="panel-label">Oscillators</div>
+                <div id="oscillatorSubPanel1" class="general-panel horizontal-panel">
+                    <div class="knob-panel">
+                        <div class="control-label">freq</div>
+                        <webaudio-knob id="oscillator1FrequencyKnob" data-tag="c_freq1" src="knobs/selector_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                    
+                    <div class="knob-panel">
+                        <div class="control-label">fine</div>
+                        <webaudio-knob id="oscillator1FineKnob" data-tag="k_fine1" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                    <div class="knob-panel">                        
+                        <div class="control-label">wave</div>
+                        <webaudio-knob id="oscillator1WaveformKnob" data-tag="c_wave1" src="knobs/selector_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                </div>
+                
+                <div id="oscillatorSubPanel2" class="general-panel horizontal-panel">
+                    <div class="knob-panel">
+                        <div class="control-label">freq</div>
+                        <webaudio-knob id="oscillator2FrequencyKnob" data-tag="c_freq2" src="knobs/selector_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                    
+                    <div class="knob-panel">
+                        <div class="control-label">fine</div>
+                        <webaudio-knob id="oscillator2FineKnob" data-tag="k_fine2" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                    <div class="knob-panel">                        
+                        <div class="control-label">wave</div>
+                        <webaudio-knob id="oscillator2WaveformKnob" data-tag="c_wave2" src="knobs/selector_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                </div>
+            </div>
 
-<!-- =========================================================== -->
-<div id="buttons">
-    <div style="position:absolute; right:275px; top:22px;">
-        <a href="README.txt" style="font-size:12px;color:#999999;">README</a>
+            <div id="mixerPanel" class="general-panel vertical-panel">
+                <div class="panel-label">Mixer</div>
+                <div id="mixerSubPanel1" class="general-panel horizontal-panel">
+                    <div class="knob-panel">
+                        <div class="control-label">volume</div>
+                        <webaudio-knob id="mixer1VolumeKnob" data-tag="k_vol1" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+
+                    <div class="knob-panel">
+                        <div class="control-label">on/off</div>
+                        <webaudio-switch id="mixer1Switch" data-tag="s_osc1" src="knobs/ONButtonBlueFlat.png" width="64" height="64"></webaudio-switch>
+                    </div>
+                </div>
+                
+                <div id="mixerSubPanel2" class="general-panel horizontal-panel">
+                    <div class="knob-panel">
+                        <div class="control-label">volume</div>
+                        <webaudio-knob id="mixer2VolumeKnob" data-tag="k_vol2" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                    </div>
+                    <div class="knob-panel">
+                        <div class="control-label">on/off</div>
+                        <webaudio-switch id="mixer2Switch" data-tag="s_osc2" src="knobs/ONButtonBlueFlat.png" width="64" height="64"></webaudio-switch>
+                    </div>
+                </div>
+            </div>
+            <div id="filterPanel" class="general-panel vertical-panel">
+                <div class="panel-label">Filter</div>
+                <div id="filterControlsPanel" class="general-panel vertical-panel">
+                    <div id="filterControlsSubPanel1" class="general-panel horizontal-panel">
+                        <div class="knob-panel">
+                            <div class="control-label">cutoff</div>
+                            <webaudio-knob id="filterCutoffKnob" data-tag="k_cut" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">emphasis</div>
+                            <webaudio-knob id="filterEmphasisKnob" data-tag="k_emp" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">contour</div>
+                            <webaudio-knob id="filterContourKnob" data-tag="k_amo" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                    </div>
+                    <div id="filterControlsSubPanel2" class="general-panel horizontal-panel">
+                        <div class="knob-panel">
+                            <div class="control-label">attack</div>
+                            <webaudio-knob id="filterAttackKnob" data-tag="k_fa" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">decay</div>
+                            <webaudio-knob id="filterDecayKnob" data-tag="k_fd" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">sustain</div>
+                            <webaudio-knob id="filterSustainKnob" data-tag="k_fs" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                    </div>
+                </div>
+                <div id="loudnessPanel" class="general-panel vertical-panel">
+                    <div class="panel-label">Loudness</div>
+                    <div id="loudnessSubPanel" class="general-panel horizontal-panel">
+                        <div class="knob-panel">
+                            <div class="control-label">attack</div>
+                            <webaudio-knob id="loudnessAttackKnob" data-tag="k_la" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">decay</div>
+                            <webaudio-knob id="loudnessDecayKnob" data-tag="k_ld" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>
+                        <div class="knob-panel">
+                            <div class="control-label">sustain</div>
+                            <webaudio-knob id="loudnessSustainKnob" data-tag="k_vol" src="knobs/silver_knob.png" width="64" height="64"></webaudio-knob>
+                        </div>    
+                    </div>
+                </div>                
+            </div>
+
+            <div id="outputPanel" class="general-panel vertical-panel">
+                <div class="knob-panel">
+                    <div class="control-label">volume</div>
+                    <webaudio-knob id="outputVolumeKnob" src="knobs/silver_knob.png" data-tag="k_vol" width="64" height="64"></webaudio-knob>
+                </div>    
+                <div class="knob-panel">
+                    <div class="control-label">delay</div>
+                    <webaudio-knob id="outputDelayKnob" src="knobs/silver_knob.png" data-tag="k_dly" width="64" height="64"></webaudio-knob>
+                </div>    
+            </div>
+        </div>
+        
+        <div id="keyboardPanel" class="general-panel horizontal-panel">
+            <webaudio-keyboard id="mainKeyboard" keys="49" width="1000" min="24"></webaudio-keyboard>
+        </div>
+        
     </div>
-
-    <div style="position:absolute; right:190px; top:20px;">
-    <div class="fb-like" data-href="https://aikelab.net/websynthv2/" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
-    </div>
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&appId=44529105079&version=v2.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
-    <div style="position:absolute; right:110px; top:23px;">
-    <a href="https://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-    </div>
-
-    <div style="position:absolute; right:20px; top:23px;">
-    <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard-noballoon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
-    </div>
-</div>
-
+    <script type="text/javascript" src="index.js"></script>
 </body>
 </html>

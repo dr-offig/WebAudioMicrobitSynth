@@ -8,14 +8,14 @@
 
 ///////////// BROWSER CHECK /////////////////////
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
-window.addEventListener('load', init, false);
-function init() {
-	try {
-		var context = new AudioContext() ;
-	} catch(e) {
-		alert('Web Audio API is not supported in this browser');
-	}
-};
+// window.addEventListener('load', init, false);
+// function init() {
+// 	try {
+// 		var context = new AudioContext() ;
+// 	} catch(e) {
+// 		alert('Web Audio API is not supported in this browser');
+// 	}
+// };
 
 ///////////// Init Parameter /////////////////////
 var stream_length = 1024;
@@ -397,5 +397,9 @@ WebSynth.prototype.stop = function() {
 	this.feg.note_off();
 };
 
-var synth = new WebSynth();
+// var synth = new WebSynth();
+// var synth;
 
+// function createSynth() {
+// 	synth = new WebSynth();
+// }

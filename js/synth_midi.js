@@ -80,6 +80,7 @@ MidiInterface.prototype.setMidiChannel = function(n) {
 }
 
 MidiInterface.prototype.receive = function(event) {
+	if (!synth) { return; }
 	if (event.data.length >= 3) {
 		var note_no = event.data[1];
 		if ((event.data[0] & 0xF0) === 0x90) {
@@ -94,6 +95,18 @@ MidiInterface.prototype.receive = function(event) {
 		} else if ((event.data[0] & 0xF0) === 0x80) {
 			// Note Off
 			ctrl.note_off(note_no);
+		} else if ((event.data[0] & 0xF0) === 0xB0) {
+			// Control Change
+			var controllerNumber = event.data[1];
+			var controllerValue = event.data[2];
+			// scale midi range of 0-127 to knob range of 0-100
+			var scaledValue = controllerValue / 1.27;			
+			
+			var controllerObj = ctrl.controls.find((x) => { return (x.controllerNumber == controllerNumber); });
+			if (controllerObj) {
+				ctrl.setDspParam(controllerObj.tag, scaledValue);
+				ctrl.setControllerValue(controllerObj.tag, scaledValue);
+			}			
 		}
 	}
 }

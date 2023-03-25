@@ -1,0 +1,49 @@
+body {
+    background-color: black;
+}
+
+#mainPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-style: solid;
+    border-color: rgba(100, 100, 99, 0.5);
+    padding: 10px;
+    background-color: rgb(105, 104, 104);
+    color: white;
+}
+
+
+.vertical-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.horizontal-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.knob-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.general-panel {
+    border-style: solid;
+    border-color: rgba(69, 69, 69, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 5px;
+    padding: 5px;
+}
+
+.control-label {
+    font-size: 50%;
+}

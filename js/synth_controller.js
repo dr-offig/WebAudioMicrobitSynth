@@ -6,7 +6,7 @@
  *
  */
 
-var ctrl;
+// var ctrl;
 
 var Ctrl = function() {
 	this.focus = '';
@@ -21,88 +21,115 @@ var Ctrl = function() {
 	this.sensitivity = 2;
 	this.infomode = 0;
 
+	this.controls = [
+		{ tag: 's_glide', controllerNumber: 12, element: 'glideSwitch', type: 'switch' },
+		{ tag: 'k_glide', controllerNumber: 13, element: 'glideKnob', type: 'knob' },
+		{ tag: 'c_freq1', controllerNumber: 2, element: 'oscillator1FrequencyKnob', type: 'chicken' },
+		{ tag: 'c_freq2', controllerNumber: 3, element: 'oscillator2FrequencyKnob', type: 'chicken' },
+		{ tag: 'k_fine1', controllerNumber: 4, element: 'oscillator1FineKnob', type: 'knob' },
+		{ tag: 'k_fine2', controllerNumber: 5, element: 'oscillator2FineKnob', type: 'knob' },
+		{ tag: 'c_wave1', controllerNumber: 6, element: 'oscillator1WaveformKnob', type: 'chicken' },
+		{ tag: 'c_wave2', controllerNumber: 7, element: 'oscillator2WaveformKnob', type: 'chicken' },
+		{ tag: 'k_vol1', controllerNumber: 8, element: 'mixer1VolumeKnob', type: 'knob' },
+		{ tag: 'k_vol2', controllerNumber: 9, element: 'mixer2VolumeKnob', type: 'knob' },
+		{ tag: 's_osc1', controllerNumber: 10, element: 'mixer1Switch', type: 'switch' },
+		{ tag: 's_osc2', controllerNumber: 11, element: 'mixer2Switch', type: 'knob' },
+		{ tag: 'k_cut', controllerNumber: 1, element: 'filterCutoffKnob', type: 'knob' },
+		{ tag: 'k_emp', controllerNumber: 0, element: 'filterEmphasisKnob', type: 'knob' },
+		{ tag: 'k_amo', controllerNumber: 14, element: 'filterContourKnob', type: 'knob' },
+		{ tag: 'k_fa', controllerNumber: 15, element: 'filterAttackKnob', type: 'knob' },
+		{ tag: 'k_fd', controllerNumber: 16, element: 'filterDecayKnob', type: 'knob' },
+		{ tag: 'k_fs', controllerNumber: 17, element: 'filterSustainKnob', type: 'knob' },
+		{ tag: 'k_la', controllerNumber: 18, element: 'loudnessAttackKnob', type: 'knob' },
+		{ tag: 'k_ld', controllerNumber: 19, element: 'loudnessDecayKnob', type: 'knob' },
+		{ tag: 'k_vol', controllerNumber: 20, element: 'outputVolumeKnob', type: 'knob' },
+		{ tag: 'k_dly', controllerNumber: 21, element: 'outputDelayKnob', type: 'knob' }
+	];
+
+
 	var self = this;
-	document.body.onmousedown = function(e) {
-		if (self.mouseDown) return;
-		if (self.focus.substring(0, 2) === 'k_') {
-			self.mouseDown = true;
-			self.sx = e.clientX;
-			self.sy = e.clientY;
-			self.knob = gui.obj(self.focus);
-			self.normalKnob = true;
-			self.knobVal = self.getKnobValue(self.knob);
+	// document.body.onmousedown = function(e) {
+	// 	if (self.mouseDown) return;
+	// 	if (self.focus.substring(0, 2) === 'k_') {
+	// 		self.mouseDown = true;
+	// 		self.sx = e.clientX;
+	// 		self.sy = e.clientY;
+	// 		self.knob = gui.obj(self.focus);
+	// 		self.normalKnob = true;
+	// 		self.knobVal = self.getKnobValue(self.knob);
 
-		} else if (self.focus.substring(0, 2) === 'c_') {
-			self.mouseDown = true;
-			self.sx = e.clientX;
-			self.sy = e.clientY;
-			self.knob = gui.obj(self.focus);
-			self.normalKnob = false;
-			self.knobVal = self.getKnobValue(self.knob);
+	// 	} else if (self.focus.substring(0, 2) === 'c_') {
+	// 		self.mouseDown = true;
+	// 		self.sx = e.clientX;
+	// 		self.sy = e.clientY;
+	// 		self.knob = gui.obj(self.focus);
+	// 		self.normalKnob = false;
+	// 		self.knobVal = self.getKnobValue(self.knob);
 
-		} else if (self.focus.substring(0, 2) === 's_') {
-			var o = gui.obj(self.focus);
-			self.toggleSwitch(o);
-			self.setDspParam(self.focus, self.getSwitchValue(o));
+	// 	} else if (self.focus.substring(0, 2) === 's_') {
+	// 		var o = gui.obj(self.focus);
+	// 		self.toggleSwitch(o);
+	// 		self.setDspParam(self.focus, self.getSwitchValue(o));
 
-		} else if (self.focus.substring(0, 3) === 'key') {
-			self.note = parseInt(self.focus.substring(3), 10);
-			self.note_on(self.note);
+	// 	} else if (self.focus.substring(0, 3) === 'key') {
+	// 		self.note = parseInt(self.focus.substring(3), 10);
+	// 		self.note_on(self.note);
 
-		} else if (self.focus === 'b_start') {
-			if (!sequencer.playing) {
-				self.play_demo();
-			} else {
-				self.stop_demo();
-			}
+	// 	} else if (self.focus === 'b_start') {
+	// 		if (!sequencer.playing) {
+	// 			self.play_demo();
+	// 		} else {
+	// 			self.stop_demo();
+	// 		}
 
-		} else if (self.focus === 'logo') {
-			self.infomode = (self.infomode + 1) % 3;
-			switch (self.infomode) {
-				case 0:
-					stats.domElement.style.display = 'none';
-					document.getElementById('buttons').style.display = 'block';
-					break;
-				case 1:
-					stats.domElement.style.display = 'block';
-					document.getElementById('buttons').style.display = 'none';
-					break;
-				case 2:
-					stats.domElement.style.display = 'none';
-					document.getElementById('buttons').style.display = 'none';
-					break;
-			}
+	// 	} else if (self.focus === 'logo') {
+	// 		self.infomode = (self.infomode + 1) % 3;
+	// 		switch (self.infomode) {
+	// 			case 0:
+	// 				stats.domElement.style.display = 'none';
+	// 				document.getElementById('buttons').style.display = 'block';
+	// 				break;
+	// 			case 1:
+	// 				stats.domElement.style.display = 'block';
+	// 				document.getElementById('buttons').style.display = 'none';
+	// 				break;
+	// 			case 2:
+	// 				stats.domElement.style.display = 'none';
+	// 				document.getElementById('buttons').style.display = 'none';
+	// 				break;
+	// 		}
 
-		}
-	};
-	document.body.onmousemove = function(e) {
-		if (!self.mouseDown) return;
-		ex = e.clientX;
-		ey = e.clientY;
-		var diff = Math.floor((self.sy - ey) * self.sensitivity);
-		var val = self.knobVal + diff;
-		if (val > 100) val = 100;
-		else if (val < 0) val = 0;
-		self.setKnobValue(self.knob, val);
-		gui.setDirty();
-		self.setDspParam(self.focus, val);
-	};
-	document.body.onmouseup = function(e) {
-		ex = e.clientX;
-		ey = e.clientY;
-		self.mouseDown = false;
-		if (self.focus !== '') {
-			if (self.focus.substring(0, 3) === 'key') {
-				self.note_off(self.note);
-			}
-			if ((self.focus.substring(0, 2) === 'k_') || (self.focus.substring(0, 2) === 'c_')) {
-				gui.obj(self.focus).children[0].intensity = 0;
-				self.focus = '';
-				gui.setDirty();
-			}
-		}
-	};
+	// 	}
+	// };
+	// document.body.onmousemove = function(e) {
+	// 	if (!self.mouseDown) return;
+	// 	ex = e.clientX;
+	// 	ey = e.clientY;
+	// 	var diff = Math.floor((self.sy - ey) * self.sensitivity);
+	// 	var val = self.knobVal + diff;
+	// 	if (val > 100) val = 100;
+	// 	else if (val < 0) val = 0;
+	// 	self.setKnobValue(self.knob, val);
+	// 	gui.setDirty();
+	// 	self.setDspParam(self.focus, val);
+	// };
+	// document.body.onmouseup = function(e) {
+	// 	ex = e.clientX;
+	// 	ey = e.clientY;
+	// 	self.mouseDown = false;
+	// 	if (self.focus !== '') {
+	// 		if (self.focus.substring(0, 3) === 'key') {
+	// 			self.note_off(self.note);
+	// 		}
+	// 		if ((self.focus.substring(0, 2) === 'k_') || (self.focus.substring(0, 2) === 'c_')) {
+	// 			gui.obj(self.focus).children[0].intensity = 0;
+	// 			self.focus = '';
+	// 			gui.setDirty();
+	// 		}
+	// 	}
+	// };
 }
+
 
 Ctrl.prototype.setDspParam = function(key, val) {
 	switch (key) {
@@ -184,7 +211,7 @@ Ctrl.prototype.setDspParam = function(key, val) {
 	}
 }
 
-
+/*
 Ctrl.prototype.getKnobValue = function(o) {
 	if (this.normalKnob) {
 		return Math.floor(100 * (2.2 - o.rotation.y) / 4.4);
@@ -267,38 +294,45 @@ Ctrl.prototype.isWhiteKey = function(note) {
 		case 11: return true;
 	}
 }
+*/
 
 Ctrl.prototype.keyDown = function(note) {
-	var o = gui.obj('key' + note);
-	if (!o) {
-		return;
-	}
-	if (this.isWhiteKey(note)) {
-		o.rotation.x = 0.05;
-		o.position.y = -0.2;
-		o.position.z = 2.1;
-	} else {
-		o.rotation.x = 0.1;
-		o.position.y = -0.2;
-	}
-	gui.setDirty();
+	// var o = gui.obj('key' + note);
+	// if (!o) {
+	// 	return;
+	// }
+	// if (this.isWhiteKey(note)) {
+	// 	o.rotation.x = 0.05;
+	// 	o.position.y = -0.2;
+	// 	o.position.z = 2.1;
+	// } else {
+	// 	o.rotation.x = 0.1;
+	// 	o.position.y = -0.2;
+	// }
+	// gui.setDirty();
+
+	const kb = document.getElementById('mainKeyboard');
+	kb.setNote(1, note);
 }
 
 Ctrl.prototype.keyUp = function(note) {
-	var o = gui.obj('key' + note);
-	if (!o) {
-		return;
-	}
-	if (this.isWhiteKey(note)) {
-		o.rotation.x = 0;
-		o.position.y = 0;
-		o.position.z = 2;
-	} else {
-		o.rotation.x = 0;
-		o.position.y = 0;
-	}
-	gui.setDirty();
+	// var o = gui.obj('key' + note);
+	// if (!o) {
+	// 	return;
+	// }
+	// if (this.isWhiteKey(note)) {
+	// 	o.rotation.x = 0;
+	// 	o.position.y = 0;
+	// 	o.position.z = 2;
+	// } else {
+	// 	o.rotation.x = 0;
+	// 	o.position.y = 0;
+	// }
+	// gui.setDirty();
+	const kb = document.getElementById('mainKeyboard');
+	kb.setNote(0, note);
 }
+
 
 Ctrl.prototype.note_on = function(note) {
 	synth.play(note);
@@ -317,6 +351,7 @@ Ctrl.prototype.all_note_off = function() {
 	}
 };
 
+/*
 Ctrl.prototype.play_demo = function() {
 	sequencer.play();
 	gui.obj('b_start').position.y = -0.1;
@@ -344,84 +379,124 @@ Ctrl.prototype.stop_demo = function(wait_release) {
 		gui.setDirty();		
 	}, wait);
 };
+*/
 
 Ctrl.prototype.setDefaultValues = function() {
-	this.setSwitchValue(gui.obj('s_glide'), 100);
+	//this.setSwitchValue(gui.obj('s_glide'), 100);
+	this.setControllerValue('s_glide', 1);
 	this.setDspParam('s_glide', 100);
 
-	this.setKnobValue(gui.obj('k_glide'), 20);
-	this.setDspParam('s_glide', 20);
+	//this.setKnobValue(gui.obj('k_glide'), 20);
+	this.setControllerValue('k_glide', 20);
+	this.setDspParam('k_glide', 20);
 
-	this.normalKnob = false;
-	this.setKnobValue(gui.obj('c_freq1'), 0);
+	// this.normalKnob = false;
+	// this.setKnobValue(gui.obj('c_freq1'), 0);
+	this.setControllerValue('c_freq1', 0);
 	this.setDspParam('c_freq1', 0);
 
-	this.setKnobValue(gui.obj('c_freq2'), 50);
+	//this.setKnobValue(gui.obj('c_freq2'), 50);
+	this.setControllerValue('c_freq2', 50);
 	this.setDspParam('c_freq2', 50);
 
-	this.normalKnob = true;
-	this.setKnobValue(gui.obj('k_fine1'), 50);
+	//this.normalKnob = true;
+	//this.setKnobValue(gui.obj('k_fine1'), 50);
+	this.setControllerValue('k_fine1', 50);
 	this.setDspParam('k_fine1', 50);
 
-	this.setKnobValue(gui.obj('k_fine2'), 50);
+	//this.setKnobValue(gui.obj('k_fine2'), 50);
+	this.setControllerValue('k_fine2', 50);
 	this.setDspParam('k_fine2', 50);
 
-	this.normalKnob = false;
-	this.setKnobValue(gui.obj('c_wave1'), 50);
+	// this.normalKnob = false;
+	// this.setKnobValue(gui.obj('c_wave1'), 50);
+	this.setControllerValue('c_wave1', 50);
 	this.setDspParam('c_wave1', 50);
 
-	this.setKnobValue(gui.obj('c_wave2'), 50);
+	// this.setKnobValue(gui.obj('c_wave2'), 50);
+	this.setControllerValue('c_wave2', 50);
 	this.setDspParam('c_wave2', 50);
 
-	this.normalKnob = true;
-	this.setKnobValue(gui.obj('k_vol1'), 50);
+	// this.normalKnob = true;
+	// this.setKnobValue(gui.obj('k_vol1'), 50);
+	this.setControllerValue('k_vol1', 50);
 	this.setDspParam('k_vol1', 50);
 
-	this.setKnobValue(gui.obj('k_vol2'), 50);
+	//this.setKnobValue(gui.obj('k_vol2'), 50);
+	this.setControllerValue('k_vol2', 50);
 	this.setDspParam('k_vol2', 50);
 
-	this.setSwitchValue(gui.obj('s_osc1'), 100);
+	//this.setSwitchValue(gui.obj('s_osc1'), 100);
+	this.setControllerValue('s_osc1', 1);
 	this.setDspParam('s_osc1', 100);
 
-	this.setSwitchValue(gui.obj('s_osc2'), 100);
+	// this.setSwitchValue(gui.obj('s_osc2'), 100);
+	this.setControllerValue('s_osc2', 1);
 	this.setDspParam('s_osc2', 100);
 
-	this.setKnobValue(gui.obj('k_cut'), 50);
+	// this.setKnobValue(gui.obj('k_cut'), 50);
+	this.setControllerValue('k_cut', 50);
 	this.setDspParam('k_cut', 50);
 
-	this.setKnobValue(gui.obj('k_emp'), 50);
+	// this.setKnobValue(gui.obj('k_emp'), 50);
+	this.setControllerValue('k_emp', 50);
 	this.setDspParam('k_emp', 50);
 
-	this.setKnobValue(gui.obj('k_amo'), 50);
+	// this.setKnobValue(gui.obj('k_amo'), 50);
+	this.setControllerValue('k_amo', 50);
 	this.setDspParam('k_amo', 50);
 
-	this.setKnobValue(gui.obj('k_fa'), 20);
+	// this.setKnobValue(gui.obj('k_fa'), 20);
+	this.setControllerValue('k_fa', 20);
 	this.setDspParam('k_fa', 20);
 
-	this.setKnobValue(gui.obj('k_fd'), 10);
+	// this.setKnobValue(gui.obj('k_fd'), 10);
+	this.setControllerValue('k_fd', 10);
 	this.setDspParam('k_fd', 10);
 
-	this.setKnobValue(gui.obj('k_fs'), 50);
+	// this.setKnobValue(gui.obj('k_fs'), 50);
+	this.setControllerValue('k_fs', 50);
 	this.setDspParam('k_fs', 50);
 
-	this.setKnobValue(gui.obj('k_la'), 10);
+	// this.setKnobValue(gui.obj('k_la'), 10);
+	this.setControllerValue('k_la', 10);
 	this.setDspParam('k_la', 10);
 
-	this.setKnobValue(gui.obj('k_ld'), 20);
+	// this.setKnobValue(gui.obj('k_ld'), 20);
+	this.setControllerValue('k_ld', 20);
 	this.setDspParam('k_ld', 20);
 
-	this.setKnobValue(gui.obj('k_ls'), 100);
+	// this.setKnobValue(gui.obj('k_ls'), 100);
+	this.setControllerValue('k_ls', 100);
 	this.setDspParam('k_ls', 100);
 
-	this.setKnobValue(gui.obj('k_vol'), 50);
+	// this.setKnobValue(gui.obj('k_vol'), 50);
+	this.setControllerValue('k_vol', 50);
 	this.setDspParam('k_vol', 50);
 
-	this.setKnobValue(gui.obj('k_dly'), 40);
-	this.setDspParam('k_dly', 40);
+	// this.setKnobValue(gui.obj('k_dly'), 40);
+	// this.setDspParam('k_dly', 40);
+	this.setControllerValue('k_dly', 0);
+	this.setDspParam('k_dly', 0);
 }
 
-$(function() {
-	ctrl = new Ctrl();
-});
+
+Ctrl.prototype.setControllerValue = function(tag, value) {
+	const controllerObj = ctrl.controls.find((x) => { return (x.tag == tag); });
+	if (controllerObj) {
+		const elem = document.getElementById(controllerObj.element);
+		if (controllerObj.type == 'switch') {
+			elem.setValue(value > 0 ? 1 : 0);
+		} else {
+			elem.setValue(Math.min(100, Math.max(0, Math.round(value))));
+		}
+
+	}
+}
+
+
+// $(function() {
+// 	ctrl = new Ctrl();
+// });
 
 

@@ -158,7 +158,7 @@ var Sequencer = function() {
 		 60,  60,  60,  60,  60,  60,  60,  60,   70,  70,  70,  70,  70,  70,  70,  70, 
 		 100,
 	];
-	this.btn = gui.obj('play');
+	// this.btn = gui.obj('play');
 	this.playing = false;
 }
 
