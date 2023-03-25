@@ -1,32 +1,31 @@
-WebAudioSynth V2
+WebAudioMidiSynth
 ====
-Web browser based synthesizer application
+Midi-enabled browser-based synthesizer
 
 ## DESCRIPTION
-WebAudioSynth v2 is new version of WebAudioSynth.  
-(old version: https://aikelab.net/websynth/ )   
-It is an analog style synthesizer application which all written in JavaScript using Web Audio API.  
-![image](images/thumb2.png)
+WebAudioMidiSynth is a fork of WebAudioSynthV2 by aike https://github.com/aike/webaudiosynthv2  
+It is an analog style synthesizer application written in JavaScript using Web Audio API.  
 
-## NEW FEATURES
-- Web GL 3DCG view using three.js and ThreePiece.js
-- switch from ScriptProcessor oscillator to alias noise free Oscillator Node 
-- add Web MIDI Interface
-- add ASCII Keyboard Interface
-- full score version demo song
-- refactoring
+This fork is primarily intended as a teaching aid. The idea is to demonstrate a browser based 
+synthesiser application, that responds to Midi commands (notes and control changes).
+It is intended to be run locally. For this reason the Web GL frontend in the original webaudiosynthv2
+has been replaced with a simpler gui (because the original underlying libraries are not designed
+to be run locally, and have trouble with CrossOriginRequest restrictions).
 
-## WEBSITE
-https://aikelab.net/websynthv2/  
-https://github.com/aike/webaudiosynthv2
+
+## CHANGES FROM WebAudioSynthV2
+- Front end GUI replaced with html page leveraging webaudio-controls. This allows the application to 
+be run locally
+- Midi Control Change messages enabled
+
 
 ## SYSTEM REQUIREMENT
-WebAudioSynth requires the latest version of Chrome or Safari. 
-The current version of Firefox(35.0) does not support GLIDE Control.
+WebAudioMidiSynth runs best in Chrome.
 
 ## CREDIT
-WebAudioSynth V2 program is licensed under MIT License.  
-Programming and GUI Design: aike  
-three.js by mrdoob https://github.com/mrdoob/three.js/  
-ThreePiece.js by aike https://github.com/aike/ThreePiece.js  
-Contact: twitter @aike1000
+WebAudioMidiSynth is licensed under MIT License.  
+It borrows heavily from 
+WebAudioSynthV2 by aike https://github.com/aike/webaudiosynthv2
+webaudio-controls by g200k https://github.com/g200kg/webaudio-controls
+
+Programming and GUI Design: dr-offig
